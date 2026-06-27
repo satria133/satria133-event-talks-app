@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stay updated with the latest Google Cloud BigQuery features, changes, and deprecations. Parse, search, filter, and share updates instantly on Twitter.">
+    <title>BigQuery Release Notes Hub</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Background Glow Elements -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <div class="app-container">
+        <!-- Sidebar or Header Panel -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div class="bq-logo">
+                    <i class="fa-solid fa-database logo-icon"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <div class="brand-info">
+                    <h1>BigQuery Releases</h1>
+                    <p class="tagline">Real-time Stream & Twitter Broadcaster</p>
+                </div>
+            </div>
+
+            <!-- Stats/Status Card -->
+            <div class="status-card">
+                <div class="status-row">
+                    <span class="status-label">Feed Status</span>
+                    <span class="status-indicator online" id="status-badge">
+                        <span class="dot"></span> Connected
+                    </span>
+                </div>
+                <div class="status-row">
+                    <span class="status-label">Last Updated</span>
+                    <span class="status-value" id="last-fetched-time">Never</span>
+                </div>
+            </div>
+
+            <!-- Control Actions -->
+            <div class="control-actions">
+                <button id="btn-refresh" class="btn btn-primary" title="Refresh Release Notes">
+                    <i class="fa-solid fa-arrows-rotate" id="refresh-spinner"></i>
+                    <span>Sync Feed</span>
+                </button>
+            </div>
+            
+            <!-- Filters & Search Section -->
+            <div class="filters-container">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search updates...">
+                </div>
+                
+                <div class="filter-group">
+                    <span class="filter-title">Filter by Category</span>
+                    <div class="filter-tags">
+                        <button class="filter-tag active" data-category="all">All</button>
+                        <button class="filter-tag" data-category="feature"><i class="fa-solid fa-star filter-icon text-feature"></i> Feature</button>
+                        <button class="filter-tag" data-category="change"><i class="fa-solid fa-wrench filter-icon text-change"></i> Change</button>
+                        <button class="filter-tag" data-category="deprecation"><i class="fa-solid fa-triangle-exclamation filter-icon text-deprecation"></i> Deprecation</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="app-main">
+            <!-- Loading State -->
+            <div id="loading-state" class="state-container">
+                <div class="skeleton-ring">
+                    <div class="ring-core"></div>
+                </div>
+                <h3>Fetching BigQuery Feed...</h3>
+                <p>Loading the latest release notes from Google Cloud feed</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="state-container hidden">
+                <div class="error-icon-box">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                </div>
+                <h3>Connection Error</h3>
+                <p id="error-message">Could not fetch release notes at this time.</p>
+                <button id="btn-retry" class="btn btn-outline">
+                    <i class="fa-solid fa-rotate-right"></i> Retry Sync
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div id="empty-state" class="state-container hidden">
+                <div class="empty-icon-box">
+                    <i class="fa-solid fa-folder-open"></i>
+                </div>
+                <h3>No Updates Found</h3>
+                <p>Try refining your search or filters.</p>
+            </div>
+
+            <!-- Feed Content List -->
+            <div id="feed-list" class="feed-timeline hidden">
+                <!-- Data will be dynamically rendered here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Sticky Share/Tweet Drawer (Appears when items are selected) -->
+    <div id="tweet-drawer" class="tweet-drawer hidden">
+        <div class="drawer-content">
+            <div class="drawer-left">
+                <div class="selected-badge">
+                    <span id="selected-count">0</span>
+                    <span>Selected</span>
+                </div>
+                <div class="drawer-meta">
+                    <h4>Compose Broadcast</h4>
+                    <p id="drawer-preview-text">Ready to tweet selected releases</p>
+                </div>
+            </div>
+            
+            <div class="drawer-right">
+                <button id="btn-clear-selection" class="btn btn-text">
+                    Cancel
+                </button>
+                <button id="btn-tweet-selected" class="btn btn-twitter glow-twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>Tweet Selected</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Micro-Notification Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Script imports -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
